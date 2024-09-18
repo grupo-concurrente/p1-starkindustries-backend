@@ -43,7 +43,6 @@ public abstract class Sensor {
                 "Id: " + id +
                 ", Nombre: " + nombre + '\'' +
                 ", Ubicacion: " + ubicacion + '\'' +
-                ", Estado:" + estado +
-                ']';
+                ", Estado:" + estado;
     }
 }
