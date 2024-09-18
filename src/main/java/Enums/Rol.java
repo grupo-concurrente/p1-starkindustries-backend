@@ -1,4 +1,4 @@
-package usuario;
+package Enums;
 
 public enum Rol {
     ADMINISTRADOR,
