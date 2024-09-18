@@ -9,7 +9,7 @@ public class SensorTemp extends Sensor {
     @Override
     public void detect(String valor) {
         this.temperatura = Long.parseLong(valor);
-        System.out.println("Temperatura correcta");
+        System.out.println("Temperatura correcta: " + temperatura);
     }
 
     @Override
