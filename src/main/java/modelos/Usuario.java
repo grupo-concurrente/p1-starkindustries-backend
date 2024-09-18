@@ -25,6 +25,7 @@ public class Usuario {
     private String email;
     @Setter @Getter
     private String contrasena;
+    @Enumerated(EnumType.STRING)
     Rol rol;
 
     public Usuario() {
