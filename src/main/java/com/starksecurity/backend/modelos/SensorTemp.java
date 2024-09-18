@@ -1,5 +1,8 @@
 package com.starksecurity.backend.modelos;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class SensorTemp extends Sensor {
     private Long temperatura;
 
