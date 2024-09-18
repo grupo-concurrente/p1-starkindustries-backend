@@ -1,4 +1,4 @@
-package Enums;
+package com.starksecurity.backend.modelos;
 
 public enum Rol {
     ADMINISTRADOR,

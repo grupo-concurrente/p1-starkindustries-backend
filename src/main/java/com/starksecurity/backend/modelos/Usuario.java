@@ -1,6 +1,5 @@
-package modelos;
+package com.starksecurity.backend.modelos;
 
-import Enums.Rol;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
