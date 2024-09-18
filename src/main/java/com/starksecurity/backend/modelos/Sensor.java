@@ -8,14 +8,8 @@ import lombok.Setter;
 @Table(name = "sensores")
 public abstract class Sensor {
     @Id
-    @SequenceGenerator(
-            name = "secuencia_sensor",
-            sequenceName = "secuencia_sensor",
-            allocationSize = 1
-    )
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY,
-            generator = "secuencia_sensor"
+            strategy = GenerationType.IDENTITY
     )
     private long id;
     @Getter @Setter
