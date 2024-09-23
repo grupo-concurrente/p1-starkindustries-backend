@@ -4,7 +4,6 @@ import com.starksecurity.backend.repositorios.RepositorioLectura;
 import jakarta.persistence.Entity;
 @Entity
 public class SensorAcceso extends Sensor {
-        private String acceso;
 
     public SensorAcceso() {
     }
@@ -24,9 +23,4 @@ public class SensorAcceso extends Sensor {
         // Imprimir mensaje de detección (puedes personalizar o sustituir por lógica más avanzada)
         System.out.println("Sensor de acceso detectó valor: " + valor);
     }
-
-        @Override
-        public String toString() {
-            return super.toString() + "Acceso: " + acceso + "]";
-        }
 }

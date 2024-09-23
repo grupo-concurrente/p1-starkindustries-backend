@@ -16,7 +16,6 @@ public class SensorMov extends Sensor {
         super(id, nombre, ubicacion, estado);
     }
 
-
     @Override
     public void detect(String valor, RepositorioLectura repositorioLectura) {
         super.detect(valor, repositorioLectura);
