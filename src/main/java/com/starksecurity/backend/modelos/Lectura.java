@@ -41,6 +41,12 @@ public class Lectura {
         this.fecha = LocalDateTime.now();
     }
 
+    public Lectura(String valor, Sensor sensor, LocalDateTime time) {
+        this.valor = valor;
+        this.sensor = sensor;
+        this.fecha = time;
+    }
+
     @Override
     public String toString() {
         return "Lectura{" +
