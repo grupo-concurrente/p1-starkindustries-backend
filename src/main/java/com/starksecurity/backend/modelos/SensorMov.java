@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class SensorMov extends Sensor {
-        private boolean movimiento;
-
     public SensorMov() {
     }
 
@@ -18,13 +16,7 @@ public class SensorMov extends Sensor {
     }
 
     @Override
-        public void detect(String valor) {
-            this.movimiento = Boolean.parseBoolean(valor);
-            System.out.println("Movimiento detectado: " + valor);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + "Movimiento: " + movimiento + "]";
-        }
+    public void detect(String valor) {
+        System.out.println("Movimiento detectado: " + valor);
+    }
 }

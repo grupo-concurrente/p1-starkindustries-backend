@@ -4,14 +4,6 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class SensorTemp extends Sensor {
-    private Long temperatura;
-
-    @Override
-    public void detect(String valor) {
-        this.temperatura = Long.parseLong(valor);
-        System.out.println("Temperatura detectada: "+this.temperatura);
-    }
-
     public SensorTemp() {
     }
 
@@ -24,7 +16,7 @@ public class SensorTemp extends Sensor {
     }
 
     @Override
-    public String toString() {
-        return super.toString() + "Temperatura: " + temperatura + "]";
+    public void detect(String valor) {
+        System.out.println("Temperatura detectada: " + valor);
     }
 }
