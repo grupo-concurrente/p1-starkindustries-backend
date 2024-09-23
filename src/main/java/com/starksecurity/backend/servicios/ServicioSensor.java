@@ -7,6 +7,7 @@ import com.starksecurity.backend.modelos.SensorAcceso;
 import com.starksecurity.backend.repositorios.RepositorioSensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Optional;
