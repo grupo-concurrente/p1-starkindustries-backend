@@ -22,6 +22,7 @@ public class Usuario {
     @Setter @Getter
     private String contrasena;
 
+    @Getter @Setter
     @Enumerated(EnumType.STRING)
     Rol rol;
 
