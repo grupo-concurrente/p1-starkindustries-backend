@@ -24,6 +24,23 @@ public class Lectura {
     @Getter @Setter
     private Sensor sensor;
 
+    public Lectura(Long id, String valor, LocalDateTime fecha, Sensor sensor) {
+        this.id = id;
+        this.valor = valor;
+        this.fecha = fecha;
+        this.sensor = sensor;
+    }
+
+    public Lectura() {
+        this.fecha = LocalDateTime.now();
+    }
+
+    public Lectura(String valor, Sensor sensor) {
+        this.valor = valor;
+        this.sensor = sensor;
+        this.fecha = LocalDateTime.now();
+    }
+
     @Override
     public String toString() {
         return "Lectura{" +
