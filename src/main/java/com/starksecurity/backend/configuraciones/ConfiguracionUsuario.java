@@ -13,7 +13,7 @@ import java.util.List;
 public class ConfiguracionUsuario {
 
     @Bean
-    CommandLineRunner commandLineRunner(RepositorioUsuario repositorioUsuario) {
+    CommandLineRunner userRunner(RepositorioUsuario repositorioUsuario) {
         return args -> {
             Usuario defaultAdmin = new Usuario( "admin@starkindustries.com", "admin1", "admin", Rol.ADMINISTRADOR);
             Usuario defaultUser = new Usuario( "default@starkindustries.com", "user1", "user", Rol.USUARIO);
