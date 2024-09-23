@@ -1,11 +1,10 @@
 package com.starksecurity.backend.modelos;
 
+import com.starksecurity.backend.repositorios.RepositorioLectura;
 import jakarta.persistence.Entity;
 
 @Entity
 public class SensorMov extends Sensor {
-        private boolean movimiento;
-
     public SensorMov() {
     }
 
@@ -18,13 +17,10 @@ public class SensorMov extends Sensor {
     }
 
     @Override
-        public void detect(String valor) {
-            this.movimiento = Boolean.parseBoolean(valor);
-            System.out.println("Movimiento detectado: " + valor);
-        }
+    public void detect(String valor, RepositorioLectura repositorioLectura) {
+        super.detect(valor, repositorioLectura);
 
-        @Override
-        public String toString() {
-            return super.toString() + "Movimiento: " + movimiento + "]";
-        }
+        // Imprimir mensaje de detección (puedes personalizar o sustituir por lógica más avanzada)
+        System.out.println("Sensor de movimiento detectó valor: " + valor);
+    }
 }

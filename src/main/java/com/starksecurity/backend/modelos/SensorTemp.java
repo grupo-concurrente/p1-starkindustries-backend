@@ -1,16 +1,10 @@
 package com.starksecurity.backend.modelos;
 
+import com.starksecurity.backend.repositorios.RepositorioLectura;
 import jakarta.persistence.Entity;
 
 @Entity
 public class SensorTemp extends Sensor {
-    private Long temperatura;
-
-    @Override
-    public void detect(String valor) {
-        this.temperatura = Long.parseLong(valor);
-        System.out.println("Temperatura detectada: "+this.temperatura);
-    }
 
     public SensorTemp() {
     }
@@ -24,7 +18,10 @@ public class SensorTemp extends Sensor {
     }
 
     @Override
-    public String toString() {
-        return super.toString() + "Temperatura: " + temperatura + "]";
+    public void detect(String valor, RepositorioLectura repositorioLectura) {
+        super.detect(valor, repositorioLectura);
+
+        // Imprimir mensaje de detección (puedes personalizar o sustituir por lógica más avanzada)
+        System.out.println("Sensor de temperatura detectó valor: " + valor);
     }
 }

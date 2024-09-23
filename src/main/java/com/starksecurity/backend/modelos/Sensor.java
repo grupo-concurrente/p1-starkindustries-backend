@@ -1,8 +1,11 @@
 package com.starksecurity.backend.modelos;
 
+import com.starksecurity.backend.repositorios.RepositorioLectura;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sensores")
@@ -35,7 +38,13 @@ public abstract class Sensor {
         this.estado = estado;
     }
 
-    public abstract void detect(String valor);
+    public void detect(String valor, RepositorioLectura repositorioLectura){
+        // Crear una nueva lectura con el valor recibido y la fecha actual
+        Lectura lectura = new Lectura(valor, this, LocalDateTime.now());
+
+        // Guardar la lectura en la base de datos
+        repositorioLectura.save(lectura);
+    }
 
     @Override
     public String toString() {
