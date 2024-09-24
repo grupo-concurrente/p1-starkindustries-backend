@@ -1,10 +1,12 @@
 package com.starksecurity.backend.tareas;
 
+import com.starksecurity.backend.controladores.ControladorSensor;
 import com.starksecurity.backend.modelos.Sensor;
 import com.starksecurity.backend.modelos.SensorAcceso;
 import com.starksecurity.backend.modelos.SensorMov;
 import com.starksecurity.backend.modelos.SensorTemp;
 import com.starksecurity.backend.repositorios.RepositorioLectura;
+import com.starksecurity.backend.repositorios.RepositorioSensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,21 +20,37 @@ public class SensorScheduler {
     private RepositorioLectura repositorioLectura;
 
     @Autowired
-    private List<Sensor> sensores;
+    private RepositorioSensor repositorioSensor;
 
     private Random random = new Random();
 
-    // ejecutar cada 10 segundos
+    // Ejecutar cada 10 segundos
     @Scheduled(fixedRate = 10000)
     public void ejecutarTarea() {
-        Sensor sensorAleatorio = seleccionarSensorAleatorio();
+        // Filtrar sensores que estén encendidos (estado = true)
+        List<Sensor> sensoresEncendidos = repositorioSensor.findByEstado(true);
+        System.out.println("Sensores encendidos: " + sensoresEncendidos.size());
+
+        Sensor sensorAleatorio = seleccionarSensorAleatorio(sensoresEncendidos);
+        if (sensorAleatorio == null) {
+            System.out.println("No hay sensores disponibles.");
+        } else {
+            System.out.println("Sensor seleccionado: " + sensorAleatorio.getNombre());
+        }
+
+      /*  // Seleccionar un sensor aleatorio
+
         if (sensorAleatorio != null) {
+            // Generar valor aleatorio basado en el tipo de sensor
             String valorAleatorio = generarValorAleatorio(sensorAleatorio);
+            // Llamar al método detect del sensor seleccionado
             sensorAleatorio.detect(valorAleatorio, repositorioLectura);
         }
+
+       */
     }
 
-    private Sensor seleccionarSensorAleatorio() {
+    private Sensor seleccionarSensorAleatorio(List<Sensor> sensores) {
         if (sensores.isEmpty()) {
             return null;
         }
@@ -46,8 +64,9 @@ public class SensorScheduler {
         } else if (sensor instanceof SensorMov) {
             return random.nextBoolean() ? "movimiento detectado" : "sin movimiento";
         } else if (sensor instanceof SensorTemp) {
-            return String.valueOf(15 + random.nextInt(20)); //generar temperatura entre 15 y 35
+            return String.valueOf(15 + random.nextInt(20)); // Generar temperatura entre 15 y 35 grados
         }
         return "valor no definido";
     }
 }
+

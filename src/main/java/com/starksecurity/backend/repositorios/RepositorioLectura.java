@@ -17,4 +17,7 @@ public interface RepositorioLectura extends JpaRepository<Lectura, Long> {
     // Obtener lecturas más recientes por sensor
     @Query("SELECT l FROM Lectura l WHERE l.sensor = ?1 ORDER BY l.fecha DESC")
     List<Lectura> findRecentLecturesBySensor(Sensor sensor);
+
+
+
 }

@@ -2,10 +2,11 @@ package com.starksecurity.backend.config;
 
 
 import jdk.jfr.Enabled;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@Enabled
+@Configuration
+
 @EnableScheduling
 public class SchedulingConfig {
-
 }
