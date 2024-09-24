@@ -37,17 +37,6 @@ public class SensorScheduler {
         } else {
             System.out.println("Sensor seleccionado: " + sensorAleatorio.getNombre());
         }
-
-      /*  // Seleccionar un sensor aleatorio
-
-        if (sensorAleatorio != null) {
-            // Generar valor aleatorio basado en el tipo de sensor
-            String valorAleatorio = generarValorAleatorio(sensorAleatorio);
-            // Llamar al método detect del sensor seleccionado
-            sensorAleatorio.detect(valorAleatorio, repositorioLectura);
-        }
-
-       */
     }
 
     private Sensor seleccionarSensorAleatorio(List<Sensor> sensores) {
