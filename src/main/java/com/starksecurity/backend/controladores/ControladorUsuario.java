@@ -3,20 +3,23 @@ package com.starksecurity.backend.controladores;
 import com.starksecurity.backend.modelos.Usuario;
 import com.starksecurity.backend.servicios.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/usuarios")
+@RequestMapping("admin/api/v1/usuarios")
 public class ControladorUsuario {
 
     private final ServicioUsuario servicioUsuario;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ControladorUsuario(ServicioUsuario servicioUsuario) {
+    public ControladorUsuario(ServicioUsuario servicioUsuario, PasswordEncoder passwordEncoder) {
         this.servicioUsuario = servicioUsuario;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Obtener todos los usuarios
@@ -34,7 +37,7 @@ public class ControladorUsuario {
     // Agregar un nuevo usuario
     @PostMapping
     public void addUsuario(@RequestBody Usuario usuario) {
-        servicioUsuario.addNewUsuario(usuario);
+        servicioUsuario.addNewUsuario(new Usuario(usuario.getNombre(), usuario.getEmail(), passwordEncoder.encode(usuario.getContrasena()), usuario.getRol()));
     }
 
     // Eliminar un usuario por ID

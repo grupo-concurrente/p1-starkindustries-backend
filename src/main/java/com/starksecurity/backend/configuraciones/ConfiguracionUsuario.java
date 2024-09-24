@@ -6,6 +6,7 @@ import com.starksecurity.backend.repositorios.RepositorioUsuario;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 public class ConfiguracionUsuario {
 
     @Bean
-    CommandLineRunner userRunner(RepositorioUsuario repositorioUsuario) {
+    CommandLineRunner userRunner(RepositorioUsuario repositorioUsuario, PasswordEncoder passwordEncoder) {
         return args -> {
-            Usuario defaultAdmin = new Usuario( "admin@starkindustries.com", "admin1", "admin", Rol.ADMINISTRADOR);
-            Usuario defaultUser = new Usuario( "default@starkindustries.com", "user1", "user", Rol.USUARIO);
+            Usuario defaultAdmin = new Usuario( "admin@starkindustries.com", "admin", passwordEncoder.encode("admin"), Rol.ADMINISTRADOR);
+            Usuario defaultUser = new Usuario( "user@starkindustries.com", "user", passwordEncoder.encode("user"), Rol.USUARIO);
             repositorioUsuario.deleteAll();
             repositorioUsuario.saveAll(List.of(defaultAdmin, defaultUser));
         };

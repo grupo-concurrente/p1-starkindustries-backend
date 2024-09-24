@@ -8,7 +8,7 @@ import com.starksecurity.backend.repositorios.RepositorioUsuario;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@RequestMapping("/api/v1/health")
+@RequestMapping("publico/api/v1/health")
 public class ControladorHealthCheck {
 
     private final RepositorioUsuario repositorioUsuario;

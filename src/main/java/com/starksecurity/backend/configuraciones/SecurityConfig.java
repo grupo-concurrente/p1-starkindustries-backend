@@ -18,12 +18,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/publico/**").permitAll()  // Endpoints públicos
-                .requestMatchers("/admin/**").hasRole("ADMIN")  // Solo accesible por ADMIN
-                .anyRequest().authenticated()                // Cualquier otra ruta requiere autenticación
-            )
-            .httpBasic(Customizer.withDefaults());
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/publico/**").permitAll()  // Endpoints públicos
+                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Solo accesible por ADMIN
+                        .anyRequest().hasAnyRole("USER","ADMIN")    // Cualquier otra ruta requiere autenticación
+                )
+                .httpBasic(Customizer.withDefaults());  // Autenticación básica
         return http.build();
     }
 
@@ -31,13 +31,13 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder.encode("password"))  // Cifrar contraseña del usuario
+            .username("user@starkindustries.com")
+            .password(passwordEncoder.encode("user"))  // Cifrar contraseña del usuario
             .roles("USER")
             .build();
 
         UserDetails admin = User.builder()
-            .username("admin")
+            .username("admin@starkindustries.com")
             .password(passwordEncoder.encode("admin"))  // Cifrar contraseña del administrador
             .roles("ADMIN")
             .build();

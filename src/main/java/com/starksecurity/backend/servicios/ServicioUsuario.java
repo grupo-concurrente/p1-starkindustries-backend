@@ -3,19 +3,31 @@ package com.starksecurity.backend.servicios;
 import com.starksecurity.backend.modelos.Usuario;
 import com.starksecurity.backend.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ServicioUsuario {
+public class ServicioUsuario implements UserDetailsService {
 
     private final RepositorioUsuario repositorioUsuario;
 
     @Autowired
     public ServicioUsuario(RepositorioUsuario repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
+    }
+
+
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Usuario usuario = repositorioUsuario.findUsuarioByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
+        return new User(usuario.getEmail(), usuario.getContrasena(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+usuario.getRol().name())));
     }
 
     // Obtener todos los usuarios
