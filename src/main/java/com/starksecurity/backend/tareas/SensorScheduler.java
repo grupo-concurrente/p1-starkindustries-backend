@@ -1,6 +1,5 @@
 package com.starksecurity.backend.tareas;
 
-import com.starksecurity.backend.controladores.ControladorSensor;
 import com.starksecurity.backend.modelos.Sensor;
 import com.starksecurity.backend.modelos.SensorAcceso;
 import com.starksecurity.backend.modelos.SensorMov;
@@ -22,7 +21,7 @@ public class SensorScheduler {
     @Autowired
     private RepositorioSensor repositorioSensor;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     // Ejecutar cada 10 segundos
     @Scheduled(fixedRate = 10000)
@@ -36,6 +35,7 @@ public class SensorScheduler {
             System.out.println("No hay sensores disponibles.");
         } else {
             System.out.println("Sensor seleccionado: " + sensorAleatorio.getNombre());
+            sensorAleatorio.detect(generarValorAleatorio(sensorAleatorio), repositorioLectura);
         }
     }
 
@@ -49,13 +49,13 @@ public class SensorScheduler {
 
     private String generarValorAleatorio(Sensor sensor) {
         if (sensor instanceof SensorAcceso) {
-            return random.nextBoolean() ? "activo" : "desactivado";
+            return random.nextBoolean() ? "Acceso permitido" : "Acceso denegado";
         } else if (sensor instanceof SensorMov) {
-            return random.nextBoolean() ? "movimiento detectado" : "sin movimiento";
+            return random.nextBoolean() ? "Movimiento detectado" : "Sin movimiento";
         } else if (sensor instanceof SensorTemp) {
             return String.valueOf(15 + random.nextInt(20)); // Generar temperatura entre 15 y 35 grados
         }
-        return "valor no definido";
+        return "Tipo no válido";
     }
 }
 

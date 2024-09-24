@@ -1,7 +1,6 @@
-package com.starksecurity.backend.config;
+package com.starksecurity.backend.configuraciones;
 
 
-import jdk.jfr.Enabled;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 

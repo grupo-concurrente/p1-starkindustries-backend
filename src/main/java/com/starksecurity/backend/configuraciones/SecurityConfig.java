@@ -1,4 +1,4 @@
-package com.starksecurity.backend.config;
+package com.starksecurity.backend.configuraciones;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class SecurityConfig {
                         .requestMatchers("/publico/").permitAll()  // Rutas públicas
                         .anyRequest().authenticated()               // Cualquier otra ruta requiere autenticación
                 )
-                .httpBasic();  // Usar autenticación básica
+                .httpBasic();  // 'httpBasic()' is deprecated since version 6.1 and marked for removal
         return http.build();
     }
 

@@ -2,9 +2,9 @@ package com.starksecurity.backend.modelos;
 
 import com.starksecurity.backend.repositorios.RepositorioLectura;
 import jakarta.persistence.Entity;
+
 @Entity
 public class SensorAcceso extends Sensor {
-
     public SensorAcceso() {
     }
 
