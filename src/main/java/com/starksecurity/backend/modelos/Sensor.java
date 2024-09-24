@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "sensores")
@@ -21,6 +22,9 @@ public abstract class Sensor {
 
     @Getter @Setter
     private boolean estado;
+
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Lectura> lecturas;
 
     public Sensor() {
     }

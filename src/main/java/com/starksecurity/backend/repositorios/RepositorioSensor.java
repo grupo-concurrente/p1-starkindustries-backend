@@ -26,4 +26,6 @@ public interface RepositorioSensor extends JpaRepository<Sensor, Long> {
 
     @Query("SELECT s FROM SensorAcceso s")
     List<SensorAcceso> findAllAccesoSensors();
+
+    List<Sensor> findByEstado(boolean b);
 }
