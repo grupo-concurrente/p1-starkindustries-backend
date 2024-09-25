@@ -20,7 +20,7 @@ public class Lectura {
     @Getter @Setter
     private LocalDateTime fecha;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sensor_id")
     @Getter @Setter
     private Sensor sensor;

@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/lecturas")
+@RequestMapping("publico/api/v1/lecturas")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ControladorLectura {
 
     private final ServicioLectura servicioLectura;
