@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 public class ConfiguracionSensor {
@@ -16,6 +18,9 @@ public class ConfiguracionSensor {
     @Bean
     CommandLineRunner sensorRunner(RepositorioSensor repositorioSensor, RepositorioLectura repositorioLectura) {
         return args -> {
+
+            ExecutorService executorService = Executors.newFixedThreadPool(4); // crear pool de 4 threads
+
             // Creamos los sensores
             SensorTemp sensor1on = new SensorTemp( "sensor1", "Vestibulo", true);
             SensorTemp sensor2off = new SensorTemp( "sensor2", "Entrada", false);
@@ -26,6 +31,23 @@ public class ConfiguracionSensor {
             repositorioSensor.deleteAll();
             repositorioSensor.saveAll(List.of(sensor1on, sensor2off, sensor3on, sensor4on));
 
+            Runnable tarea1 = () ->{
+                Lectura lectura1 = new Lectura();
+                Lectura lectura2 = new Lectura();
+                repositorioLectura.saveAll(List.of(lectura1, lectura2));
+            };
+
+            Runnable tarea2 = () ->{
+                Lectura lectura1 = new Lectura();
+                Lectura lectura2 = new Lectura();
+                repositorioLectura.saveAll(List.of(lectura1, lectura2));
+            };
+
+            executorService.submit(tarea1);
+            executorService.submit(tarea1);
+
+            executorService.shutdown();
+            /*
             // Creamos las lecturas para sensor1on
             Lectura lectura1 = new Lectura("25.5", sensor1on, LocalDateTime.of(2024, 9, 27, 14, 0));
             Lectura lectura2 = new Lectura("24.5", sensor1on, LocalDateTime.of(2024, 9, 27, 14, 35));
@@ -56,6 +78,8 @@ public class ConfiguracionSensor {
                     lectura9, lectura10, lectura11,
                     lectura12, lectura13, lectura14
             ));
+
+             */
         };
     }
 }

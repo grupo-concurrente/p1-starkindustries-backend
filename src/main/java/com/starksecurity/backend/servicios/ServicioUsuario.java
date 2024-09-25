@@ -3,6 +3,7 @@ package com.starksecurity.backend.servicios;
 import com.starksecurity.backend.modelos.Usuario;
 import com.starksecurity.backend.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder; // Importa el PasswordEncoder
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,12 @@ import java.util.Optional;
 public class ServicioUsuario {
 
     private final RepositorioUsuario repositorioUsuario;
+    private final PasswordEncoder passwordEncoder; // PasswordEncoder para verificar contraseñas
 
     @Autowired
-    public ServicioUsuario(RepositorioUsuario repositorioUsuario) {
+    public ServicioUsuario(RepositorioUsuario repositorioUsuario, PasswordEncoder passwordEncoder) {
         this.repositorioUsuario = repositorioUsuario;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Obtener todos los usuarios
@@ -72,5 +75,18 @@ public class ServicioUsuario {
         }
 
         repositorioUsuario.save(usuario);
+    }
+
+    // Método para verificar si el usuario existe y la contraseña es correcta
+    public boolean verificarUsuario(String email, String rawPassword) {
+        Optional<Usuario> usuarioOpt = repositorioUsuario.findUsuarioByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            // Verificar si la contraseña ingresada coincide con la cifrada almacenada
+            return passwordEncoder.matches(rawPassword, usuario.getContrasena());
+        }
+
+        return false; // Si el usuario no existe o la contraseña no coincide
     }
 }
