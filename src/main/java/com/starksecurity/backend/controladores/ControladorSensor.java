@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/sensores")
+@RequestMapping("publico/api/v1/sensores")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ControladorSensor {
 
     private final ServicioSensor servicioSensor;

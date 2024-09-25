@@ -25,6 +25,11 @@ public class ServicioUsuario implements UserDetailsService {
     }
 
 
+    // En ServicioUsuario.java
+    public Optional<Usuario> getUsuarioByEmail(String email) {
+        return repositorioUsuario.findUsuarioByEmail(email);
+    }
+
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = repositorioUsuario.findUsuarioByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
         return new User(usuario.getEmail(), usuario.getContrasena(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+usuario.getRol().name())));
