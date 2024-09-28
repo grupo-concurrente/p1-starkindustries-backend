@@ -10,11 +10,11 @@ public class SensorTemp extends Sensor {
     }
 
     public SensorTemp(String nombre, String ubicacion, boolean estado) {
-        super(nombre, ubicacion, estado);
+        super(nombre, ubicacion, estado, TipoSensor.TEMPERATURA);
     }
 
     public SensorTemp(long id, String nombre, String ubicacion, boolean estado) {
-        super(id, nombre, ubicacion, estado);
+        super(id, nombre, ubicacion, estado, TipoSensor.TEMPERATURA);
     }
 
     @Override

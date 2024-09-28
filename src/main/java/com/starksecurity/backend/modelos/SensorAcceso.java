@@ -9,11 +9,11 @@ public class SensorAcceso extends Sensor {
     }
 
     public SensorAcceso(String nombre, String ubicacion, boolean estado) {
-        super(nombre, ubicacion, estado);
+        super(nombre, ubicacion, estado, TipoSensor.ACCESO);
     }
 
     public SensorAcceso(long id, String nombre, String ubicacion, boolean estado) {
-        super(id, nombre, ubicacion, estado);
+        super(id, nombre, ubicacion, estado, TipoSensor.ACCESO);
     }
 
     @Override
