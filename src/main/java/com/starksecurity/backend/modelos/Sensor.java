@@ -23,23 +23,29 @@ public abstract class Sensor {
     @Getter @Setter
     private boolean estado;
 
+    @Getter
+    @Enumerated(EnumType.STRING)
+    TipoSensor tipo;
+
     @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lectura> lecturas;
 
     public Sensor() {
     }
 
-    public Sensor(String nombre, String ubicacion, boolean estado) {
+    public Sensor(String nombre, String ubicacion, boolean estado, TipoSensor tipo) {
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.estado = estado;
+        this.tipo = tipo;
     }
 
-    public Sensor(long id, String nombre, String ubicacion, boolean estado) {
+    public Sensor(long id, String nombre, String ubicacion, boolean estado, TipoSensor tipo) {
         this.id = id;
         this.nombre = nombre;
         this.ubicacion = ubicacion;
         this.estado = estado;
+        this.tipo = tipo;
     }
 
     public void detect(String valor, RepositorioLectura repositorioLectura){
