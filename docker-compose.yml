@@ -13,7 +13,7 @@ services:
 
   backend:
     build:
-      context: ./p1-starkindustries-backend
+      context: .
       dockerfile: Dockerfile
     container_name: backend_server
     ports:
@@ -29,7 +29,7 @@ services:
 
   frontend:
     build:
-      context: ./p1-starkindustries-frontend
+      context: ../p1-starkindustries-frontend
       dockerfile: Dockerfile
     container_name: frontend_server
     ports:
