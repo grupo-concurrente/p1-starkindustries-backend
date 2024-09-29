@@ -12,30 +12,32 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
-public class SensorScheduler {
-    @Autowired
-    private RepositorioLectura repositorioLectura;
+public class TareaSensor {
 
-    @Autowired
-    private RepositorioSensor repositorioSensor;
+    private final RepositorioSensor repositorioSensor;
+    private final RepositorioLectura repositorioLectura;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(4); // Pool de 4 hilos
 
     private final Random random = new Random();
 
-    // Ejecutar cada 10 segundos
+    public TareaSensor(RepositorioSensor repositorioSensor, RepositorioLectura repositorioLectura) {
+        this.repositorioSensor = repositorioSensor;
+        this.repositorioLectura = repositorioLectura;
+    }
+
     @Scheduled(fixedRate = 10000)
     public void ejecutarTarea() {
         // Filtrar sensores que estén encendidos (estado = true)
         List<Sensor> sensoresEncendidos = repositorioSensor.findByEstado(true);
         System.out.println("Sensores encendidos: " + sensoresEncendidos.size());
 
-        Sensor sensorAleatorio = seleccionarSensorAleatorio(sensoresEncendidos);
-        if (sensorAleatorio == null) {
-            System.out.println("No hay sensores disponibles.");
-        } else {
-            System.out.println("Sensor seleccionado: " + sensorAleatorio.getNombre());
-            sensorAleatorio.detect(generarValorAleatorio(sensorAleatorio), repositorioLectura);
+        for (Sensor sensor : sensoresEncendidos) {
+            // Ejecutar cada sensor en un hilo separado
+            executorService.submit(() -> procesarSensor(sensor));
         }
     }
 
@@ -45,6 +47,12 @@ public class SensorScheduler {
         }
         int indiceAleatorio = random.nextInt(sensores.size());
         return sensores.get(indiceAleatorio);
+    }
+
+    private void procesarSensor(Sensor sensor) {
+        String valorGenerado = generarValorAleatorio(sensor);
+        System.out.println("Procesando sensor: " + sensor.getNombre() + ", Valor: " + valorGenerado);
+        sensor.detect(valorGenerado, repositorioLectura); // Guardar la lectura en el repositorio
     }
 
     private String generarValorAleatorio(Sensor sensor) {
