@@ -1,49 +1,63 @@
 package com.starksecurity.backend.configuraciones;
 
+import com.starksecurity.backend.servicios.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Origen permitido
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Encabezados permitidos
+        configuration.setAllowCredentials(true); // Permitir el uso de credenciales
+        configuration.setMaxAge(3600L); // Duración de validez de la configuración CORS en segundos
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplicar configuración a todas las rutas
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.cors(c -> c.configurationSource(corsConfigurationSource())) // Asegúrate de que esto esté primero
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/publico/**").permitAll()  // Endpoints públicos
-                        .requestMatchers("/admin/**").hasRole("ADMIN")  // Solo accesible por ADMIN
-                        .anyRequest().hasAnyRole("USER","ADMIN")    // Cualquier otra ruta requiere autenticación
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/publico/api/v1/health").permitAll()
+                        .requestMatchers("/publico/login").permitAll()
+                        .requestMatchers("/api/v1/lecturas").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/api/v1/sensores").hasAnyRole("USUARIO", "ADMINISTRADOR")
+                        .requestMatchers("/admin/**").hasRole("ADMINISTRADOR")
+                        .anyRequest().hasAnyRole("USUARIO", "ADMINISTRADOR")
                 )
-                .httpBasic(Customizer.withDefaults());  // Autenticación básica
+                .httpBasic(Customizer.withDefaults())
+                .userDetailsService(userDetailsService);
         return http.build();
     }
 
-    // Servicio de autenticación en memoria
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.builder()
-            .username("user@starkindustries.com")
-            .password(passwordEncoder.encode("user"))  // Cifrar contraseña del usuario
-            .roles("USER")
-            .build();
-
-        UserDetails admin = User.builder()
-            .username("admin@starkindustries.com")
-            .password(passwordEncoder.encode("admin"))  // Cifrar contraseña del administrador
-            .roles("ADMIN")
-            .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }
 
     // Bean para el cifrado de contraseñas
     @Bean
