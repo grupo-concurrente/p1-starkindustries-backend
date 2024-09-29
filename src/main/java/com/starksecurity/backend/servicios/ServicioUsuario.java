@@ -3,36 +3,22 @@ package com.starksecurity.backend.servicios;
 import com.starksecurity.backend.modelos.Usuario;
 import com.starksecurity.backend.repositorios.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ServicioUsuario implements UserDetailsService {
+public class ServicioUsuario {
 
     private final RepositorioUsuario repositorioUsuario;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ServicioUsuario(RepositorioUsuario repositorioUsuario) {
+    public ServicioUsuario(RepositorioUsuario repositorioUsuario, PasswordEncoder passwordEncoder) {
         this.repositorioUsuario = repositorioUsuario;
-    }
-
-
-    // En ServicioUsuario.java
-    public Optional<Usuario> getUsuarioByEmail(String email) {
-        return repositorioUsuario.findUsuarioByEmail(email);
-    }
-
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Usuario usuario = repositorioUsuario.findUsuarioByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario con el email: " + email));
-        return new User(usuario.getEmail(), usuario.getContrasena(), Collections.singletonList(new SimpleGrantedAuthority("ROLE_"+usuario.getRol().name())));
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Obtener todos los usuarios
@@ -89,5 +75,17 @@ public class ServicioUsuario implements UserDetailsService {
         }
 
         repositorioUsuario.save(usuario);
+    }
+
+    public boolean verificarUsuario(String email, String rawPassword) {
+        Optional<Usuario> usuarioOpt = repositorioUsuario.findUsuarioByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            // Verificar si la contraseña ingresada coincide con la cifrada almacenada
+            return passwordEncoder.matches(rawPassword, usuario.getContrasena());
+        }
+
+        return false; // Si el usuario no existe o la contraseña no coincide
     }
 }
