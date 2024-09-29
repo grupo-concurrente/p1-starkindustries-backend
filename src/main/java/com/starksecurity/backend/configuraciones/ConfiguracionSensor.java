@@ -15,6 +15,8 @@ import java.util.concurrent.Executors;
 @Configuration
 public class ConfiguracionSensor {
 
+    /*
+
     @Bean
     CommandLineRunner sensorRunner(RepositorioSensor repositorioSensor, RepositorioLectura repositorioLectura) {
         return args -> {
@@ -79,7 +81,9 @@ public class ConfiguracionSensor {
                     lectura12, lectura13, lectura14
             ));
 
-             */
+
         };
     }
+                 */
+
 }

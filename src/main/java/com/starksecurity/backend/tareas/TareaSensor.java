@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class TareaSensor {
@@ -64,6 +65,16 @@ public class TareaSensor {
             return String.valueOf(15 + random.nextInt(20)); // Generar temperatura entre 15 y 35 grados
         }
         return "Tipo no válido";
+    }
+    public void shutdownExecutor() {
+        try {
+            executorService.shutdown();
+            if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
     }
 }
 
