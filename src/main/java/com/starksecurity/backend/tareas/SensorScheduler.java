@@ -12,9 +12,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class SensorScheduler {
+
     @Autowired
     private RepositorioLectura repositorioLectura;
 
@@ -22,29 +26,48 @@ public class SensorScheduler {
     private RepositorioSensor repositorioSensor;
 
     private final Random random = new Random();
+    private final int NUM_THREADS = 2; // Define el número de hilos
 
-    // Ejecutar cada 10 segundos
-    @Scheduled(fixedRate = 10000)
+    // Ejecutar cada 5 segundos
+    @Scheduled(fixedRate = 5000)
     public void ejecutarTarea() {
         // Filtrar sensores que estén encendidos (estado = true)
         List<Sensor> sensoresEncendidos = repositorioSensor.findByEstado(true);
         System.out.println("Sensores encendidos: " + sensoresEncendidos.size());
 
-        Sensor sensorAleatorio = seleccionarSensorAleatorio(sensoresEncendidos);
-        if (sensorAleatorio == null) {
-            System.out.println("No hay sensores disponibles.");
-        } else {
-            System.out.println("Sensor seleccionado: " + sensorAleatorio.getNombre());
-            sensorAleatorio.detect(generarValorAleatorio(sensorAleatorio), repositorioLectura);
+        // Crear un pool de hilos con un número definido de threads
+        ExecutorService executorService = Executors.newFixedThreadPool(NUM_THREADS);
+
+        try {
+            for (Sensor sensor : sensoresEncendidos) {
+                executorService.submit(() -> {
+                    // Lógica por cada sensor se ejecutará en paralelo
+                    procesarSensor(sensor);
+                });
+            }
+        } finally {
+            // Apagar el executor después de que todas las tareas se hayan completado
+            executorService.shutdown();
+
+            try {
+                if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                    executorService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executorService.shutdownNow();
+            }
         }
     }
 
-    private Sensor seleccionarSensorAleatorio(List<Sensor> sensores) {
-        if (sensores.isEmpty()) {
-            return null;
+    private void procesarSensor(Sensor sensor) {
+        if (sensor == null) {
+            System.out.println("No hay sensores disponibles.");
+            return;
         }
-        int indiceAleatorio = random.nextInt(sensores.size());
-        return sensores.get(indiceAleatorio);
+
+        System.out.println("Sensor seleccionado: " + sensor.getNombre());
+        String valor = generarValorAleatorio(sensor);
+        sensor.detect(valor, repositorioLectura);
     }
 
     private String generarValorAleatorio(Sensor sensor) {
@@ -58,4 +81,3 @@ public class SensorScheduler {
         return "Tipo no válido";
     }
 }
-
