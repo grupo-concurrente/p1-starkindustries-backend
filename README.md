@@ -25,45 +25,11 @@ El backend es el corazón del sistema, encargado de procesar y gestionar todos l
 git clone https://github.com/stark-industries/security-system-backend.git  
 cd security-system-backend  
 
-2. **Configurar la base de datos**:  
-- Configura una instancia de PostgreSQL y añade los detalles en `src/main/resources/application.properties`:  
-spring.datasource.url=jdbc:postgresql://<host>:<port>/<database>  
-spring.datasource.username=<usuario>  
-spring.datasource.password=<contraseña>  
+2. **Clonar el repositorio frontend en el mismo directorio padre que el backend (para que docker compose resuelva correctamente las rutas**:  
+- https://github.com/grupo-concurrente/p1-starkindustries-frontend
 
-3. **Ejecutar la aplicación**:  
-- Desde la línea de comandos:  
-./mvnw spring-boot:run  
+3. **Ejecutar la aplicación usando el orquestdor Docker Compose**:  
+- Desde la línea de comandos: docker compose up (o docker compose up --build si desea compilar la imagen)
 
-4. **Docker**:  
-- Para ejecutar el backend en un contenedor Docker:  
-docker build -t security-system-backend .  
-docker run -p 8080:8080 security-system-backend  
-
-## 🔑 Autenticación y Seguridad
-
-- **Spring Security**: Se utiliza para gestionar la autenticación y autorización de usuarios.  
-- **JWT (JSON Web Token)**: Autenticación basada en tokens. Los usuarios deben autenticarse y obtener un JWT para acceder a los servicios del backend.
-
-## 🛠️ Tecnologías Utilizadas
-
-- **Spring Boot**  
-- **Spring Security**  
-- **JWT**  
-- **PostgreSQL**  
-- **WebSocket**  
-- **Docker**  
-
-## 📊 Monitorización
-
-Se ha configurado **Spring Actuator** para monitorizar el estado del sistema en tiempo real. Podrás acceder a la información de salud del sistema en `/actuator/health`.
-
----
-
-## 📧 Contacto
-
-Si tienes alguna duda o sugerencia sobre el proyecto, no dudes en contactarnos en soporte@starkindustries.com.
-
----
-
-¡Gracias por contribuir a la seguridad de Stark Industries!
+4. **Abrir la WebApp**:  
+- Para abrir la aplicación el fronend se expone en el puerto 5173 de localhost:  http://localhost:5173
